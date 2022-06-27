@@ -1,9 +1,9 @@
 import 'package:adaptive_navigation/adaptive_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:menu_admin/screens/dates_page.dart';
-import 'package:menu_admin/screens/menu_page.dart';
 
+import 'dates_page.dart';
+import 'menu_page.dart';
 import 'feedback_page.dart';
 import 'launch_page.dart';
 import 'info_page.dart';
@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
         const DatesPage(),
         const FeedbackPage(),
       ][_index],
+      floatingActionButton: _index == 1 ? Fab() : null,
     );
   }
 }
