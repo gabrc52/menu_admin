@@ -10,3 +10,4 @@ const providerConfigs = [
 
 final db = FirebaseFirestore.instance;
 final datesRef = db.collection('fechas').doc('semestre');
+final updatesRef = db.collection('updates').doc('updates');
