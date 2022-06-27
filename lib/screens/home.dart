@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_admin/screens/dates_page.dart';
 import 'package:menu_admin/screens/menu_page.dart';
 
+import 'feedback_page.dart';
 import 'launch_page.dart';
 import 'info_page.dart';
 
@@ -21,17 +22,25 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const titles = ['Lanzar', 'Avisos', 'Menú', 'Fechas', 'Feedback'];
+    const icons = [
+      Icons.rocket,
+      Icons.info,
+      Icons.restaurant,
+      Icons.date_range,
+      Icons.feedback
+    ];
+    final size = titles.length;
+
     return AdaptiveNavigationScaffold(
       selectedIndex: _index,
       onDestinationSelected: (index) => setState(() => _index = index),
-      destinations: const [
-        AdaptiveScaffoldDestination(title: 'Lanzar', icon: Icons.rocket_launch),
-        AdaptiveScaffoldDestination(title: 'Avisos', icon: Icons.info),
-        AdaptiveScaffoldDestination(title: 'Menú', icon: Icons.restaurant),
-        AdaptiveScaffoldDestination(title: 'Fechas', icon: Icons.date_range),
+      destinations: [
+        for (int i = 0; i < size; i++)
+          AdaptiveScaffoldDestination(title: titles[i], icon: icons[i])
       ],
       appBar: AdaptiveAppBar(
-        title: const Text('Menú: ADMIN'),
+        title: Text('Menú ADMIN: ${titles[_index]}'),
         actions: [
           InkWell(
             onTap: () {
@@ -48,6 +57,7 @@ class _HomePageState extends State<HomePage> {
         const InfoPage(),
         const MenuPage(),
         const DatesPage(),
+        const FeedbackPage(),
       ][_index],
     );
   }
