@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:menu_admin/app.dart';
-import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/screens/home.dart';
 
 /// https://github.com/firebase/flutterfire/blob/master/packages/flutterfire_ui/doc/auth/integrating-your-first-screen.md
