@@ -1,15 +1,27 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutterfire_ui/auth.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final User user;
+
+  const HomePage({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Menú: ADMIN'),
+        actions: [
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed('/profile');
+            },
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(user.photoURL!),
+            ),
+          ),
+        ],
       ),
       body: const Placeholder(),
     );

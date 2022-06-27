@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutterfire_ui/auth.dart';
+import 'package:flutterfire_ui/i10n.dart';
+import 'package:menu_admin/screens/auth_gate.dart';
 import 'package:menu_admin/screens/home.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'models/constants.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -7,14 +13,34 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: const ColorScheme.light().copyWith(
           primary: Colors.blueGrey,
           secondary: Colors.amber,
         ),
       ),
+      localizationsDelegates: [
+        // Delegates below take care of built-in flutter widgets
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+
+        // This delegate is required to provide the labels that are not overridden by LabelOverrides
+        FlutterFireUILocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('es', 'MX')],
+      home: const AuthGate(),
       routes: {
-        '/': (context) => const HomePage(),
+        '/profile': (context) => ProfileScreen(
+              appBar: AppBar(
+                title: const Text('Cuenta'),
+              ),
+              actions: [
+                SignedOutAction((context) {
+                  Navigator.of(context).popAndPushNamed('/');
+                }),
+              ],
+            ),
       },
     );
   }
