@@ -39,6 +39,8 @@ dependencies:
   adaptive_navigation: ^0.0.7
   flutterfire_ui: ^0.4.2
   url_launcher: ^6.1.4
+  webviewx: ^0.2.1
+  hive: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +64,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

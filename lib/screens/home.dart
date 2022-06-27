@@ -1,6 +1,7 @@
 import 'package:adaptive_navigation/adaptive_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import 'dates_page.dart';
 import 'menu_page.dart';
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _index = 1;
+  int _index = Hive.box('navigation').get('index', defaultValue: 1);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,10 @@ class _HomePageState extends State<HomePage> {
 
     return AdaptiveNavigationScaffold(
       selectedIndex: _index,
-      onDestinationSelected: (index) => setState(() => _index = index),
+      onDestinationSelected: (index) {
+        setState(() => _index = index);
+        Hive.box('navigation').put('index', index);
+      },
       destinations: [
         for (int i = 0; i < size; i++)
           AdaptiveScaffoldDestination(title: titles[i], icon: icons[i])
