@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     final size = titles.length;
 
     return AdaptiveNavigationScaffold(
+      fabInRail: false,
       selectedIndex: _index,
       onDestinationSelected: (index) {
         setState(() => _index = index);

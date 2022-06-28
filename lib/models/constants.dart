@@ -17,3 +17,30 @@ final infoRef = db.collection('info').withConverter<Info>(
       fromFirestore: (snapshot, _) => Info.fromJson(snapshot.data()),
       toFirestore: (info, _) => info.toJson(),
     );
+final menuRef = db.collection('menu').doc('json');
+
+const meses = <String>[
+  'ene',
+  'feb',
+  'mar',
+  'abr',
+  'may',
+  'jun',
+  'jul',
+  'ago',
+  'sep',
+  'oct',
+  'nov',
+  'dic'
+];
+
+const dias = <String>['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
+const diasCompletos = <String>[
+  'lunes',
+  'martes',
+  'miércoles',
+  'jueves',
+  'viernes',
+  'sábado',
+  'domingo'
+];

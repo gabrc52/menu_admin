@@ -41,6 +41,10 @@ dependencies:
   url_launcher: ^6.1.4
   webviewx: ^0.2.1
   hive: ^2.2.2
+  path_provider: ^2.0.11
+  universal_platform: ^1.0.0+1
+  pdf: ^3.8.1
+  printing: ^5.9.1
 
 dev_dependencies:
   flutter_test:

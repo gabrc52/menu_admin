@@ -1,0 +1,161 @@
+<html>
+
+<head>
+    <title>Editor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            background: #ECEFF1;
+            color: rgba(0, 0, 0, 0.87);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0
+        }
+
+        #editor {
+            overflow-x: scroll;
+            overflow-y: scroll;
+            flex: 1;
+        }
+
+        #tabla {
+            border-collapse: collapse;
+            margin: 8px
+        }
+
+        #tabla td {
+            border: 1px solid grey;
+        }
+
+        #tabla th {
+            background: seagreen;
+            color: white;
+            border: 1px solid lightgray;
+            position: sticky;
+            top: 0;
+        }
+
+        textarea,
+        body {
+            font-family: Roboto, Noto Sans, Open Sans, Helvetica, Arial Nova, Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="editor">
+        <table id="tabla">
+
+        </table>
+    </div>
+    <script>
+        /// Generar la tabla dinámicamente...
+
+        var tabla = document.getElementById("tabla");
+
+        var toAppend = "";
+        toAppend += "<tr>"
+        const dias = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+        for (let i = 1; i <= 56; i++) {
+            toAppend += `<th>${dias[i % 7]} ${i}</th>`;
+        }
+        toAppend += "</tr>"
+        tabla.innerHTML += toAppend;
+
+        const alimentos = ["Desayuno", "Comida", "Cena"];
+        for (let a = 0; a < 3; a++) {
+            tabla.innerHTML += "<tr><td colspan=56><strong>" + alimentos[a] + "</strong></td></tr>";
+            for (let i = 0; i < 8; i++) {
+                toAppend = "";
+                toAppend += "<tr>"
+                for (let d = 1; d <= 56; d++) {
+                    toAppend += `<td><textarea id="${d},${a},${i}"`;
+                    if (i === 2) toAppend += 'style="font-weight: bold;"'
+                    toAppend += '></textarea></td>';
+                }
+                toAppend += "</tr>"
+                tabla.innerHTML += toAppend;
+            }
+        }
+
+        // Hace que al presionar Tab pases a una celda de abajo y no de la derecha.
+        let currentTabIndex = 0;
+        for (let d = 1; d <= 56; d++) {
+            for (let a = 0; a < 3; a++) {
+                for (let i = 0; i < 8; i++) {
+                    currentTabIndex++;
+                    document.getElementById(`${d},${a},${i}`).tabIndex = currentTabIndex;
+                }
+            }
+        }
+
+        /// Funciones
+
+        function abrir(menuA) {
+            menu = menuA;
+            for (let d = 1; d <= 56; d++) {
+                for (let a = 0; a < 3; a++) {
+                    for (let i = 0; i < 8; i++) {
+                        document.getElementById(`${d},${a},${i}`).value = menuA[d][a][i];
+                    }
+                }
+            }
+        }
+
+        function abrirJson(menuJson) {
+            abrir(JSON.parse(menuJson));
+        }
+
+        function guardar() {
+            let menuN = {};
+            for (let d = 1; d <= 56; d++) {
+                menuN[d] = [];
+                for (let a = 0; a < 3; a++) {
+                    menuN[d][a] = [];
+                    for (let i = 0; i < 8; i++) {
+                        let value = document.getElementById(`${d},${a},${i}`).value;
+                        if (value == '') {
+                            value = null;
+                        }
+                        menuN[d][a][i] = value;
+                    }
+                }
+            }
+            menu = menuN;
+            return menuN;
+        }
+
+        function guardarJson() {
+            let menuN = guardar();
+            return JSON.stringify(menuN);
+        }
+
+        function shiftedRight(i, n) {
+            return (i + n - 1) % 56 + 1;
+        }
+
+        function shift(n, right) {
+            let menuN = {};
+            for (let d = 1; d <= 56; d++) {
+                if (right) {
+                    menuN[shiftedRight(d, n)] = menu[d];
+                } else {
+                    menuN[d] = menu[shiftedRight(d, n)];
+                }
+            }
+            abrir(menuN);
+        }
+
+    </script>
+
+</body>
+
+</html>
