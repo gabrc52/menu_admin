@@ -19,6 +19,7 @@ class App extends StatelessWidget {
       localizationsDelegates: [
         // Delegates below take care of built-in flutter widgets
         GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
 
         // This delegate is required to provide the labels that are not overridden by LabelOverrides
@@ -32,9 +33,11 @@ class App extends StatelessWidget {
                 title: const Text('Cuenta'),
               ),
               actions: [
-                SignedOutAction((context) {
-                  Navigator.of(context).popAndPushNamed('/');
-                }),
+                SignedOutAction(
+                  (context) {
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ),
       },
