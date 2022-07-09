@@ -18,7 +18,7 @@ Future<String> _getMenuJson() async {
   return jsonString;
 }
 
-Future<void> _saveMenuJson(String json) async {
+Future<String> _saveMenuJson(String json) async {
   /// Works around https://github.com/adrianflutur/webviewx/issues/76
   ///
   /// Revertimos lo de las comillas. Y por alguna razón escapa las comillas
@@ -27,6 +27,7 @@ Future<void> _saveMenuJson(String json) async {
     json = json.replaceAll('\\\\n', '\\n').replaceAll('\\"', '"');
   }
   await menuRef.set({'rawData': json});
+  return json;
 }
 
 class MenuPage extends StatefulWidget {
@@ -67,7 +68,7 @@ class _MenuPageState extends State<MenuPage> {
           ));
         }
       } else {
-        await _saveMenuJson(json);
+        json = await _saveMenuJson(json);
         if (mounted && context != null) {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Se guardó exitosamente')));
@@ -88,7 +89,7 @@ class _MenuPageState extends State<MenuPage> {
     debugPrint('init state called!');
     () async {
       while (!webViewLoaded) {
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(const Duration(milliseconds: 100));
       }
       _loadJson(null);
     }();
@@ -105,59 +106,63 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            OutlinedButton.icon(
-              icon: const Icon(Icons.file_open),
-              onPressed: () {
-                if (hasLoaded) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => WebViewAware(
-                      child: AlertDialog(
-                        title: const Text('¿Seguro que deseas cargar el menú?'),
-                        content: const Text(
-                            'Perderás los cambios (en caso de haberlos)'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              _loadJson(context);
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('Sí, cargar'),
-                          ),
-                          TextButton(
-                            onPressed: Navigator.of(context).pop,
-                            child: const Text('No, mantener vesión actual'),
-                          ),
-                        ],
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              OutlinedButton.icon(
+                icon: const Icon(Icons.file_open),
+                onPressed: () {
+                  if (hasLoaded) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => WebViewAware(
+                        child: AlertDialog(
+                          title:
+                              const Text('¿Seguro que deseas cargar el menú?'),
+                          content: const Text(
+                              'Perderás los cambios (en caso de haberlos)'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                _loadJson(context);
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Sí, cargar'),
+                            ),
+                            TextButton(
+                              onPressed: Navigator.of(context).pop,
+                              child: const Text('No, mantener vesión actual'),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  _loadJson(null);
-                }
-              },
-              label: const Text('Cargar menú'),
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.save),
-              onPressed: () {
-                _saveJson(context);
-              },
-              label: const Text('Guardar menú'),
-            ),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.picture_as_pdf),
-              onPressed: () async {
-                await _saveJson(context);
-                if (!mounted) return;
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PdfViewPage(jsonString: json)));
-              },
-              label: const Text('Generar PDF'),
-            ),
-          ],
+                    );
+                  } else {
+                    _loadJson(null);
+                  }
+                },
+                label: const Text('Cargar menú'),
+              ),
+              OutlinedButton.icon(
+                icon: const Icon(Icons.save),
+                onPressed: () {
+                  _saveJson(context);
+                },
+                label: const Text('Guardar menú'),
+              ),
+              OutlinedButton.icon(
+                icon: const Icon(Icons.picture_as_pdf),
+                onPressed: () async {
+                  await _saveJson(context);
+                  if (!mounted) return;
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PdfViewPage(jsonString: json)));
+                },
+                label: const Text('Generar PDF'),
+              ),
+            ],
+          ),
         ),
         Expanded(
           child: WebViewX(
