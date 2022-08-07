@@ -12,9 +12,9 @@ Future<String> _getMenuJson() async {
   ///
   /// Si dejas los \n como \n entonces los interpreta como nuevas líneas
   /// y es JSON inválido y da error.
-  if (UniversalPlatform.isAndroid) {
-    jsonString = jsonString.replaceAll('\\n', '\\\\n');
-  }
+  // if (UniversalPlatform.isAndroid) {
+  //   jsonString = jsonString.replaceAll('\\n', '\\\\n');
+  // }
   return jsonString;
 }
 
@@ -23,9 +23,9 @@ Future<String> _saveMenuJson(String json) async {
   ///
   /// Revertimos lo de las comillas. Y por alguna razón escapa las comillas
   /// así que revertimos eso también
-  if (UniversalPlatform.isAndroid) {
-    json = json.replaceAll('\\\\n', '\\n').replaceAll('\\"', '"');
-  }
+  // if (UniversalPlatform.isAndroid) {
+  //   json = json.replaceAll('\\\\n', '\\n').replaceAll('\\"', '"');
+  // }
   await menuRef.set({'rawData': json});
   return json;
 }

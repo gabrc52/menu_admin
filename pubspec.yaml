@@ -39,12 +39,15 @@ dependencies:
   adaptive_navigation: ^0.0.7
   flutterfire_ui: ^0.4.2
   url_launcher: ^6.1.4
-  webviewx: ^0.2.1
+  webviewx: #^0.2.1
+    path: ../webviewx
   hive: ^2.2.2
   path_provider: ^2.0.11
   universal_platform: ^1.0.0+1
   pdf: ^3.8.1
   printing: ^5.9.1
+  flutter_iconpicker: ^3.1.4+1
+  icon_picker: ^2.1.0
 
 dev_dependencies:
   flutter_test:
