@@ -114,15 +114,16 @@ Widget _buildMealTable({
   );
 }
 
-List<Widget> _buildHeader() {
+List<Widget> _buildHeader({required int week}) {
   return [
     _buildHeaderText(text: 'Universidad Autónoma Chapingo'),
     _buildHeaderText(text: 'Dirección General de Administración'),
     _buildHeaderText(text: 'Subdirección de Servicios Asistenciales'),
     _buildHeaderText(text: 'Departamento de Alimentación - Comedor central'),
     _buildHeaderText(text: 'Menú Cíclico', bold: true),
+    _buildHeaderText(text: 'Semana ${week + 1}'),
     SizedBox(
-      height: 2 * PdfPageFormat.mm,
+      height: 1 * PdfPageFormat.mm,
     ),
   ];
 }
@@ -169,7 +170,11 @@ List<Widget> _buildFooter() {
 
 Future<Uint8List> generatePdf(String jsonString) async {
   Map<String, dynamic> menu = json.decode(jsonString);
-  final pdf = Document();
+  final pdf = Document(
+    producer: 'Menú Chapingo',
+    title: 'Menú Cíclico UACh',
+    author: 'Comisión de Alimentación',
+  );
   for (int week = 0; week < 8; week++) {
     pdf.addPage(
       Page(
@@ -179,7 +184,7 @@ Future<Uint8List> generatePdf(String jsonString) async {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ..._buildHeader(),
+              ..._buildHeader(week: week),
               ..._buildTable(menu: menu, week: week),
               ..._buildFooter(),
             ],
