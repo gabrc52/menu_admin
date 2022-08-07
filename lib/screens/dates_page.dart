@@ -103,13 +103,16 @@ class DatesPage extends StatelessWidget {
           content: TextField(
             controller: controller,
             decoration: const InputDecoration(
-                hintText: "Día del ciclo (número del 1 al 56)"),
+              hintText: 'Día del ciclo (número del 1 al 56)',
+              helperText: 'Introduce un número del 1 al 56',
+              labelText: 'Día',
+            ),
             keyboardType: TextInputType.number,
             autofocus: true,
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text("Cancelar"),
+              child: const Text('Cancelar'),
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(

@@ -9,6 +9,8 @@ import 'app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+/// TODO: permissions! this is editable by everyone
+
 // https://stackoverflow.com/questions/65852838/i-get-a-weird-error-when-trying-to-initialize-hive
 Future<Box> openHiveBox(String boxName) async {
   if (!kIsWeb && !Hive.isBoxOpen(boxName)) {

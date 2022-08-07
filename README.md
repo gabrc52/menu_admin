@@ -9,3 +9,9 @@ Web:
 ```
 flutter build web --web-renderer html --base-href "/admin/"
 ```
+
+Android:
+
+```
+flutter build apk --multidex --no-tree-shake-icons
+```

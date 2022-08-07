@@ -47,7 +47,8 @@ dependencies:
   pdf: ^3.8.1
   printing: ^5.9.1
   flutter_iconpicker: ^3.1.4+1
-  icon_picker: ^2.1.0
+  # icon_picker: ^2.1.0 # Couldn't get this one to work - very laggy and compile error
+  animations: ^2.0.3
 
 dev_dependencies:
   flutter_test:

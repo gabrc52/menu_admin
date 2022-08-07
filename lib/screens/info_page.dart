@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/models/info.dart';
 import 'package:menu_admin/screens/empty_state.dart';
+import 'package:menu_admin/screens/info_edit_page.dart';
 
 class Fab extends FloatingActionButton {
   Fab({Key? key})
@@ -29,33 +30,47 @@ class InfoPage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         final data = snapshot.requireData;
-        void _showNotImplemented() {
-          ScaffoldMessenger.of(context).showMaterialBanner(
-            MaterialBanner(
-              backgroundColor: Colors.amber,
-              leading: const Icon(Icons.bug_report),
-              content: const Text(
-                  'Funcionalidad no implementada... (en construcción)'),
-              actions: [
-                TextButton(
-                  child: const Text('De acuerdo'),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-                  },
-                ),
-              ],
-            ),
-          );
-        }
-
         return ListView.builder(
           padding: const EdgeInsets.all(10),
           itemCount: data.size,
           itemBuilder: (context, index) {
-            return data.docs[index].data().toListTile(
-                  onEditPressed: _showNotImplemented,
-                  onDeletePressed: _showNotImplemented,
+            final Info info = data.docs[index].data();
+            return info.toListTile(
+              onEditPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (context) => InfoEditPage(
+                    id: data.docs[index].id,
+                    info: data.docs[index].data(),
+                  ),
+                ),
+              ),
+              onDeletePressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('¿Seguro que deseas eliminar el aviso?'),
+                    content: Text(
+                        '"${info.title}" el ${info.date.toString().split(' ')[0]}'),
+                    actions: [
+                      TextButton(
+                        child: const Text('No'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Sí, eliminar'),
+                        onPressed: () {
+                          infoRef.doc(data.docs[index].id).delete();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
                 );
+              },
+            );
           },
         );
       },

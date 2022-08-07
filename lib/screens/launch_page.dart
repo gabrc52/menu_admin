@@ -32,6 +32,12 @@ class LaunchUpdatesButton extends StatelessWidget {
                     '¿Seguro que deseas publicar la actualización de $readableName?'),
                 actions: [
                   TextButton(
+                    child: const Text('No, todavía no'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
                     child: const Text('Sí, actualizar'),
                     onPressed: () async {
                       Navigator.of(context).pop();
@@ -39,12 +45,6 @@ class LaunchUpdatesButton extends StatelessWidget {
                       final data = snapshot.data()!;
                       data[internalName] = lastUpdate.next().number;
                       await updatesRef.set(data);
-                    },
-                  ),
-                  TextButton(
-                    child: const Text('No, todavía no'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
                     },
                   ),
                 ],
