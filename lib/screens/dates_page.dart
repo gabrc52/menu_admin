@@ -26,7 +26,7 @@ class DatesPage extends StatelessWidget {
         final DateTime fin = DateTime.fromMicrosecondsSinceEpoch(
                 (data.get('fin') as Timestamp).microsecondsSinceEpoch)
             .truncate();
-        bool legacy = data.get('legacy');
+        final int startingDay = data.get('starting-day');
 
         final aYearAgo = DateTime.now().add(const Duration(days: -365));
         final inAYear = DateTime.now().add(const Duration(days: 365));
@@ -47,7 +47,22 @@ class DatesPage extends StatelessWidget {
                   await datesRef.set({
                     'inicio': date,
                     'fin': fin,
-                    'legacy': legacy,
+                    'starting-day': startingDay,
+                  });
+                }
+              },
+            ),
+            ListTile(
+              title: const Text('Día del ciclo inicial'),
+              trailing: Text(
+                  '$startingDay (semana ${(startingDay - 1) ~/ 7 + 1}, ${diasCompletos[(startingDay - 1) % 7]})'),
+              onTap: () async {
+                final val = await _showTextInputDialog(context, startingDay);
+                if (val != null) {
+                  await datesRef.set({
+                    'inicio': inicio,
+                    'fin': fin,
+                    'starting-day': val,
                   });
                 }
               },
@@ -66,22 +81,43 @@ class DatesPage extends StatelessWidget {
                   await datesRef.set({
                     'inicio': inicio,
                     'fin': date,
-                    'legacy': legacy,
+                    'starting-day': startingDay,
                   });
                 }
               },
             ),
-            SwitchListTile.adaptive(
-              title: const Text('Comportamiento anterior'),
-              subtitle: const Text(
-                  'Esto hace que el menú empiece un día antes (ej. domingo) mostrando el menú del lunes. Útil para mostrar avisos'),
-              value: legacy,
-              onChanged: (value) async {
-                await datesRef.set({
-                  'inicio': inicio,
-                  'fin': fin,
-                  'legacy': value,
-                });
+          ],
+        );
+      },
+    );
+  }
+
+  Future<int?> _showTextInputDialog(
+      BuildContext context, int initialValue) async {
+    final controller = TextEditingController(text: '$initialValue');
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Día del ciclo inicial'),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+                hintText: "Día del ciclo (número del 1 al 56)"),
+            keyboardType: TextInputType.number,
+            autofocus: true,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Cancelar"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: const Text('Guardar'),
+              onPressed: () {
+                int val = int.parse(controller.text);
+                assert(1 <= val && val <= 56);
+                Navigator.pop(context, val);
               },
             ),
           ],

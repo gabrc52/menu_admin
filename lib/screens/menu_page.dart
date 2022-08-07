@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:menu_admin/screens/menu_pdf_view.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:webviewx/webviewx.dart';
 import 'package:menu_admin/models/constants.dart';
 
@@ -41,7 +40,7 @@ class _MenuPageState extends State<MenuPage> {
   late WebViewXController webviewController;
   late String json;
   bool hasLoaded = false;
-  bool webViewLoaded = false;
+  bool pageLoaded = false;
 
   Future<void> _loadJson(BuildContext? context) async {
     try {
@@ -88,9 +87,11 @@ class _MenuPageState extends State<MenuPage> {
     super.initState();
     debugPrint('init state called!');
     () async {
-      while (!webViewLoaded) {
-        await Future.delayed(const Duration(milliseconds: 100));
+      /// Interestingly, it only works with 1 second and not like 100 ms
+      while (!pageLoaded) {
+        await Future.delayed(const Duration(seconds: 1));
       }
+      await Future.delayed(const Duration(seconds: 1));
       _loadJson(null);
     }();
   }
@@ -173,7 +174,9 @@ class _MenuPageState extends State<MenuPage> {
                 SourceType.html,
                 fromAssets: true,
               );
-              webViewLoaded = true;
+            },
+            onPageFinished: (_) {
+              pageLoaded = true;
             },
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
