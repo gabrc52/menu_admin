@@ -83,7 +83,21 @@ class Info {
         : null;
 
     return ListTile(
-      title: Text('[${isGlobal ? '*' : date.toString().split(' ')[0]}] $title'),
+      title: RichText(
+        text: TextSpan(
+          style: ThemeData.light().textTheme.bodyLarge,
+          children: [
+            const TextSpan(text: '['),
+            TextSpan(
+              text: isGlobal ? '*' : date.toString().split(' ')[0],
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: '] $title',
+            ),
+          ],
+        ),
+      ),
       subtitle: subtitle != null ? Text(subtitle!) : null,
       onTap: onTap,
       leading: Icon(icon),
