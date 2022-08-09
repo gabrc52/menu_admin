@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/models/info.dart';
+import 'package:menu_admin/models/date_truncation.dart';
 
 class InfoEditPage extends StatefulWidget {
   final String id;
@@ -15,7 +16,7 @@ class InfoEditPage extends StatefulWidget {
 
 class InfoEditPageState extends State<InfoEditPage> {
   final _formKey = GlobalKey<FormState>();
-  DateTime date = DateTime.now().toUtc();
+  DateTime date = DateTime.now().truncate();
   bool showEveryDay = false;
   IconData icon = Icons.info;
   String? title;

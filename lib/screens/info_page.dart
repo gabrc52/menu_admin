@@ -12,7 +12,6 @@ class Fab extends FloatingActionButton {
           onPressed: () async {
             final navigator = Navigator.of(context);
             final doc = await infoRef.add(const Info());
-            print(doc.id);
             navigator.push(
               MaterialPageRoute(
                 builder: (context) => InfoEditPage(id: doc.id),
@@ -29,6 +28,22 @@ class Fab extends FloatingActionButton {
 class InfoPage extends StatelessWidget {
   const InfoPage({Key? key}) : super(key: key);
 
+  List<DateTime?> _getDuplicateDates(QuerySnapshot<Info> data) {
+    Map<DateTime?, int> count = {};
+    List<DateTime?> duplicateDates = [];
+    for (var doc in data.docs) {
+      final info = doc.data();
+      count[info.date] ??= 0;
+      count[info.date] = count[info.date]! + 1;
+    }
+    for (var entry in count.entries) {
+      if (entry.value > 1) {
+        duplicateDates.add(entry.key);
+      }
+    }
+    return duplicateDates;
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Info>>(
@@ -41,10 +56,40 @@ class InfoPage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         final data = snapshot.requireData;
+        final duplicates = _getDuplicateDates(data);
         return ListView.builder(
           padding: const EdgeInsets.all(10),
-          itemCount: data.size,
+          itemCount: data.size + (duplicates.isNotEmpty ? 1 : 0),
           itemBuilder: (context, index) {
+            if (duplicates.isNotEmpty && index == 0) {
+              final duplicatesStr = duplicates
+                  .map((e) => e == null ? '*' : e.toString().split(' ')[0])
+                  .join(', ');
+              return Card(
+                color: Colors.red[800],
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: ListTile(
+                    title: Text(
+                      'Error: La app no permite más de un aviso por fecha',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    subtitle: Text(
+                      'Las siguientes fechas tienen más de un aviso: $duplicatesStr. Por favor elimina los avisos de más.',
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.white,
+                          ),
+                    ),
+                  ),
+                ),
+              );
+            }
+            if (duplicates.isNotEmpty) {
+              index--;
+            }
             final Info info = data.docs[index].data();
             return info.toListTile(
               onEditPressed: () => Navigator.of(context).push(

@@ -83,7 +83,7 @@ class Info {
         : null;
 
     return ListTile(
-      title: Text('${isGlobal ? '*' : date.toString().split(' ')[0]} $title'),
+      title: Text('[${isGlobal ? '*' : date.toString().split(' ')[0]}] $title'),
       subtitle: subtitle != null ? Text(subtitle!) : null,
       onTap: onTap,
       leading: Icon(icon),
