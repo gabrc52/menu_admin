@@ -4,11 +4,22 @@ import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/models/info.dart';
 import 'package:menu_admin/screens/empty_state.dart';
 import 'package:menu_admin/screens/info_edit_page.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class Fab extends FloatingActionButton {
-  Fab({Key? key})
+  Fab(BuildContext context, {Key? key})
       : super.extended(
-          onPressed: () {},
+          onPressed: () async {
+            final navigator = Navigator.of(context);
+            final doc = await infoRef.add(const Info());
+            print(doc.id);
+            navigator.push(
+              MaterialPageRoute(
+                builder: (context) => InfoEditPage(id: doc.id),
+                fullscreenDialog: true,
+              ),
+            );
+          },
           label: const Text('Agregar aviso'),
           icon: const Icon(Icons.add),
           key: key,
@@ -46,27 +57,34 @@ class InfoPage extends StatelessWidget {
                 ),
               ),
               onDeletePressed: () {
+                noButton(BuildContext context) => TextButton(
+                      child: const Text('No'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    );
+                yesButton(BuildContext context) => TextButton(
+                      child: const Text('Sí, eliminar'),
+                      onPressed: () {
+                        infoRef.doc(data.docs[index].id).delete();
+                        Navigator.of(context).pop();
+                      },
+                    );
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
                     title: const Text('¿Seguro que deseas eliminar el aviso?'),
                     content: Text(
                         '"${info.title}" el ${info.date.toString().split(' ')[0]}'),
-                    actions: [
-                      TextButton(
-                        child: const Text('No'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Sí, eliminar'),
-                        onPressed: () {
-                          infoRef.doc(data.docs[index].id).delete();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
+                    actions: UniversalPlatform.isAndroid
+                        ? [
+                            yesButton(context),
+                            noButton(context),
+                          ]
+                        : [
+                            noButton(context),
+                            yesButton(context),
+                          ],
                   ),
                 );
               },

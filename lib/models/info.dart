@@ -48,7 +48,9 @@ class Info {
               fontFamily: json['icon_font'] ?? 'MaterialIcons',
             )
           : Icons.info,
-      date: (json['date'] as String).toDateTime(),
+      date: (json['date'] is String)
+          ? (json['date'] as String).toDateTime()
+          : json['date'],
       isGlobal: json['date'] == '*',
     );
   }
@@ -60,7 +62,7 @@ class Info {
       'url': url,
       'icon': icon.codePoint,
       'icon_font': icon.fontFamily,
-      'date': isGlobal ? '*' : date!.toCustomString(),
+      'date': isGlobal ? '*' : date?.toCustomString(),
     };
   }
 
@@ -81,8 +83,7 @@ class Info {
         : null;
 
     return ListTile(
-      title:
-          Text('${isGlobal ? '*' : date.toString().split(' ')[0]} ${title!}'),
+      title: Text('${isGlobal ? '*' : date.toString().split(' ')[0]} $title'),
       subtitle: subtitle != null ? Text(subtitle!) : null,
       onTap: onTap,
       leading: Icon(icon),

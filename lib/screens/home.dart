@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
         const DatesPage(),
         const FeedbackPage(),
       ][_index],
-      floatingActionButton: _index == 1 ? Fab() : null,
+      floatingActionButton: _index == 1 ? Fab(context) : null,
     );
   }
 }

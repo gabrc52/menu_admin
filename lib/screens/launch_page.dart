@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/models/update.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'empty_state.dart';
 
 class LaunchUpdatesButton extends StatelessWidget {
@@ -25,29 +26,36 @@ class LaunchUpdatesButton extends StatelessWidget {
           icon: Icon(icon),
           label: Text('Lanzar $readableName'),
           onPressed: () {
+            noButton(BuildContext context) => TextButton(
+                  child: const Text('No, todavía no'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+            yesButton(BuildContext context) => TextButton(
+                  child: const Text('Sí, actualizar'),
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                    final snapshot = await updatesRef.get();
+                    final data = snapshot.data()!;
+                    data[internalName] = lastUpdate.next().number;
+                    await updatesRef.set(data);
+                  },
+                );
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
                 title: Text(
                     '¿Seguro que deseas publicar la actualización de $readableName?'),
-                actions: [
-                  TextButton(
-                    child: const Text('No, todavía no'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  TextButton(
-                    child: const Text('Sí, actualizar'),
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                      final snapshot = await updatesRef.get();
-                      final data = snapshot.data()!;
-                      data[internalName] = lastUpdate.next().number;
-                      await updatesRef.set(data);
-                    },
-                  ),
-                ],
+                actions: UniversalPlatform.isAndroid
+                    ? [
+                        yesButton(context),
+                        noButton(context),
+                      ]
+                    : [
+                        noButton(context),
+                        yesButton(context),
+                      ],
               ),
             );
           },

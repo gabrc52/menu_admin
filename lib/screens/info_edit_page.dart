@@ -50,8 +50,12 @@ class InfoEditPageState extends State<InfoEditPage> {
         title = widget.info!.title;
       }
       if (widget.info!.subtitle != null) {
-        title = widget.info!.subtitle;
+        subtitle = widget.info!.subtitle;
       }
+      if (widget.info!.url != null) {
+        url = widget.info!.url;
+      }
+      icon = widget.info!.icon;
     }
     super.initState();
   }
@@ -189,6 +193,7 @@ class InfoEditPageState extends State<InfoEditPage> {
                     return 'Introduce un URL válido, empezando en https:// o algo similar.';
                   }
                 }
+                return null; // to supress warning
               },
             ),
           ],
