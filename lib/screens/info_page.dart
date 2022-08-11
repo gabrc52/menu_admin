@@ -121,15 +121,10 @@ class InfoPage extends StatelessWidget {
                     title: const Text('¿Seguro que deseas eliminar el aviso?'),
                     content: Text(
                         '"${info.title}" el ${info.date.toString().split(' ')[0]}'),
-                    actions: UniversalPlatform.isAndroid
-                        ? [
-                            yesButton(context),
-                            noButton(context),
-                          ]
-                        : [
-                            noButton(context),
-                            yesButton(context),
-                          ],
+                    actions: [
+                      yesButton(context),
+                      noButton(context),
+                    ],
                   ),
                 );
               },

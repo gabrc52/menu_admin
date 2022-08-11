@@ -47,15 +47,10 @@ class LaunchUpdatesButton extends StatelessWidget {
               builder: (context) => AlertDialog(
                 title: Text(
                     '¿Seguro que deseas publicar la actualización de $readableName?'),
-                actions: UniversalPlatform.isAndroid
-                    ? [
-                        yesButton(context),
-                        noButton(context),
-                      ]
-                    : [
-                        noButton(context),
-                        yesButton(context),
-                      ],
+                actions: [
+                  yesButton(context),
+                  noButton(context),
+                ],
               ),
             );
           },
