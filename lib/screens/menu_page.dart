@@ -112,40 +112,43 @@ class _MenuPageState extends State<MenuPage> {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              OutlinedButton.icon(
-                icon: const Icon(Icons.file_open),
-                onPressed: () {
-                  if (hasLoaded) {
-                    showDialog(
-                      context: context,
-                      builder: (_) => WebViewAware(
-                        child: AlertDialog(
-                          title:
-                              const Text('¿Seguro que deseas cargar el menú?'),
-                          content: const Text(
-                              'Perderás los cambios (en caso de haberlos)'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _loadJson(context);
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('Sí, cargar'),
-                            ),
-                            TextButton(
-                              onPressed: Navigator.of(context).pop,
-                              child: const Text('No, mantener vesión actual'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  } else {
-                    _loadJson(null);
-                  }
-                },
-                label: const Text('Cargar menú'),
-              ),
+              /// I added this when autoload wasn't working so I'll just comment it
+              /// out to avoid confusion.
+
+              // OutlinedButton.icon(
+              //   icon: const Icon(Icons.file_open),
+              //   onPressed: () {
+              //     if (hasLoaded) {
+              //       showDialog(
+              //         context: context,
+              //         builder: (_) => WebViewAware(
+              //           child: AlertDialog(
+              //             title:
+              //                 const Text('¿Seguro que deseas cargar el menú?'),
+              //             content: const Text(
+              //                 'Perderás los cambios (en caso de haberlos)'),
+              //             actions: [
+              //               TextButton(
+              //                 onPressed: () {
+              //                   _loadJson(context);
+              //                   Navigator.of(context).pop();
+              //                 },
+              //                 child: const Text('Sí, cargar'),
+              //               ),
+              //               TextButton(
+              //                 onPressed: Navigator.of(context).pop,
+              //                 child: const Text('No, mantener vesión actual'),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       );
+              //     } else {
+              //       _loadJson(null);
+              //     }
+              //   },
+              //   label: const Text('Cargar menú'),
+              // ),
               OutlinedButton.icon(
                 icon: const Icon(Icons.save),
                 onPressed: () {
