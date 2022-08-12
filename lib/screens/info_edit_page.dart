@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:menu_admin/dialog.dart';
 import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/models/info.dart';
 import 'package:menu_admin/models/date_truncation.dart';
@@ -23,18 +24,25 @@ class InfoEditPageState extends State<InfoEditPage> {
   String? subtitle;
   String? url;
 
-  Future<bool> update() async {
+  Future<bool> update(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      await infoRef.doc(widget.id).set(
-            Info(
-              date: date,
-              icon: icon,
-              isGlobal: showEveryDay,
-              title: title,
-              subtitle: subtitle,
-              url: url,
-            ),
-          );
+      try {
+        await infoRef.doc(widget.id).set(
+              Info(
+                date: date,
+                icon: icon,
+                isGlobal: showEveryDay,
+                title: title,
+                subtitle: subtitle,
+                url: url,
+              ),
+            );
+      } catch (e) {
+        showAlertDialog('$e', context, mounted);
+
+        /// let people go back despite the error
+        return true; // doesn't work for some reason, meh.. TODO: fix ideally but i don't expect people w/o perms to use it
+      }
       return true;
     }
     return false;
@@ -66,9 +74,9 @@ class InfoEditPageState extends State<InfoEditPage> {
     final aYearAgo = DateTime.now().add(const Duration(days: -365));
     final inAYear = DateTime.now().add(const Duration(days: 365));
     return Form(
-      onWillPop: update,
+      onWillPop: () async => await update(context),
       onChanged: () {
-        update();
+        update(context);
       },
       key: _formKey,
       child: Scaffold(
@@ -85,7 +93,7 @@ class InfoEditPageState extends State<InfoEditPage> {
                 setState(() {
                   showEveryDay = val;
                 });
-                update();
+                update(context);
               },
             ),
             if (!showEveryDay)
@@ -104,7 +112,7 @@ class InfoEditPageState extends State<InfoEditPage> {
                     setState(() {
                       date = selectedDate;
                     });
-                    update();
+                    update(context);
                   }
                 },
               ),
@@ -122,7 +130,7 @@ class InfoEditPageState extends State<InfoEditPage> {
                   setState(() {
                     icon = data;
                   });
-                  update();
+                  update(context);
                 }
               },
             ),
@@ -140,7 +148,7 @@ class InfoEditPageState extends State<InfoEditPage> {
                 /// I am updating here too because if I only update in the `Form`,
                 /// it doesn't save the last character for some reason unless you
                 /// change another field. Maybe a bug? TODO: report if so
-                update();
+                update(context);
               },
               key: const Key('title'),
             ),
@@ -162,7 +170,7 @@ class InfoEditPageState extends State<InfoEditPage> {
                 } else {
                   subtitle = val;
                 }
-                update();
+                update(context);
               },
               key: const Key('subtitle'),
             ),
@@ -183,7 +191,7 @@ class InfoEditPageState extends State<InfoEditPage> {
                 } else {
                   url = val;
                 }
-                update();
+                update(context);
               },
               key: const Key('url'),
               validator: (value) {

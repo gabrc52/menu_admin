@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:menu_admin/dialog.dart';
 import 'package:menu_admin/models/constants.dart';
 import 'empty_state.dart';
 import 'package:menu_admin/models/date_truncation.dart';
@@ -37,18 +38,22 @@ class DatesPage extends StatelessWidget {
               title: const Text('Inicio del semestre'),
               trailing: Text(inicio.toString().split(' ')[0]),
               onTap: () async {
-                final date = await showDatePicker(
-                  context: context,
-                  initialDate: inicio,
-                  firstDate: aYearAgo,
-                  lastDate: inAYear,
-                );
-                if (date != null) {
-                  await datesRef.set({
-                    'inicio': date,
-                    'fin': fin,
-                    'starting-day': startingDay,
-                  });
+                try {
+                  final date = await showDatePicker(
+                    context: context,
+                    initialDate: inicio,
+                    firstDate: aYearAgo,
+                    lastDate: inAYear,
+                  );
+                  if (date != null) {
+                    await datesRef.set({
+                      'inicio': date,
+                      'fin': fin,
+                      'starting-day': startingDay,
+                    });
+                  }
+                } catch (e) {
+                  showAlertDialog('$e', context, true);
                 }
               },
             ),
@@ -57,13 +62,17 @@ class DatesPage extends StatelessWidget {
               trailing: Text(
                   '$startingDay (semana ${(startingDay - 1) ~/ 7 + 1}, ${diasCompletos[(startingDay - 1) % 7]})'),
               onTap: () async {
-                final val = await _showTextInputDialog(context, startingDay);
-                if (val != null) {
-                  await datesRef.set({
-                    'inicio': inicio,
-                    'fin': fin,
-                    'starting-day': val,
-                  });
+                try {
+                  final val = await _showTextInputDialog(context, startingDay);
+                  if (val != null) {
+                    await datesRef.set({
+                      'inicio': inicio,
+                      'fin': fin,
+                      'starting-day': val,
+                    });
+                  }
+                } catch (e) {
+                  showAlertDialog('$e', context, true);
                 }
               },
             ),
@@ -71,18 +80,22 @@ class DatesPage extends StatelessWidget {
               title: const Text('Fin del semestre'),
               trailing: Text(fin.toString().split(' ')[0]),
               onTap: () async {
-                final date = await showDatePicker(
-                  context: context,
-                  initialDate: fin,
-                  firstDate: aYearAgo,
-                  lastDate: inAYear,
-                );
-                if (date != null) {
-                  await datesRef.set({
-                    'inicio': inicio,
-                    'fin': date,
-                    'starting-day': startingDay,
-                  });
+                try {
+                  final date = await showDatePicker(
+                    context: context,
+                    initialDate: fin,
+                    firstDate: aYearAgo,
+                    lastDate: inAYear,
+                  );
+                  if (date != null) {
+                    await datesRef.set({
+                      'inicio': inicio,
+                      'fin': date,
+                      'starting-day': startingDay,
+                    });
+                  }
+                } catch (e) {
+                  showAlertDialog('$e', context, true);
                 }
               },
             ),

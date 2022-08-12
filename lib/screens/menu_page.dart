@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menu_admin/dialog.dart';
 import 'package:menu_admin/screens/menu_pdf_view.dart';
 import 'package:webviewx/webviewx.dart';
 import 'package:menu_admin/models/constants.dart';
@@ -75,7 +76,7 @@ class _MenuPageState extends State<MenuPage> {
       }
     } catch (e) {
       if (context != null) {
-        _showAlertDialog('$e', context, mounted);
+        showAlertDialog('$e', context, mounted);
       } else {
         debugPrint('$e');
       }
@@ -184,26 +185,5 @@ class _MenuPageState extends State<MenuPage> {
         ),
       ],
     );
-  }
-}
-
-void _showAlertDialog(String content, BuildContext context, bool mounted) {
-  if (mounted) {
-    showDialog(
-      context: context,
-      builder: (_) => WebViewAware(
-        child: AlertDialog(
-          content: Text(content),
-          actions: [
-            TextButton(
-              onPressed: Navigator.of(context).pop,
-              child: const Text('Cerrar'),
-            ),
-          ],
-        ),
-      ),
-    );
-  } else {
-    debugPrint(content);
   }
 }

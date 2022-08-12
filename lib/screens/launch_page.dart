@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/models/update.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'empty_state.dart';
 
 class LaunchUpdatesButton extends StatelessWidget {

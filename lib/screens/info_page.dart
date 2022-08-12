@@ -1,23 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:menu_admin/dialog.dart';
 import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/models/info.dart';
 import 'package:menu_admin/screens/empty_state.dart';
 import 'package:menu_admin/screens/info_edit_page.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 class Fab extends FloatingActionButton {
   Fab(BuildContext context, {Key? key})
       : super.extended(
           onPressed: () async {
-            final navigator = Navigator.of(context);
-            final doc = await infoRef.add(const Info());
-            navigator.push(
-              MaterialPageRoute(
-                builder: (context) => InfoEditPage(id: doc.id),
-                fullscreenDialog: true,
-              ),
-            );
+            try {
+              final navigator = Navigator.of(context);
+              final doc = await infoRef.add(const Info());
+              navigator.push(
+                MaterialPageRoute(
+                  builder: (context) => InfoEditPage(id: doc.id),
+                  fullscreenDialog: true,
+                ),
+              );
+            } catch (e) {
+              showAlertDialog('$e', context, true);
+            }
           },
           label: const Text('Agregar aviso'),
           icon: const Icon(Icons.add),
@@ -110,9 +114,14 @@ class InfoPage extends StatelessWidget {
                     );
                 yesButton(BuildContext context) => TextButton(
                       child: const Text('Sí, eliminar'),
-                      onPressed: () {
-                        infoRef.doc(data.docs[index].id).delete();
-                        Navigator.of(context).pop();
+                      onPressed: () async {
+                        try {
+                          await infoRef.doc(data.docs[index].id).delete();
+                          Navigator.of(context).pop();
+                        } catch (e) {
+                          Navigator.of(context).pop();
+                          showAlertDialog('$e', context, true);
+                        }
                       },
                     );
                 showDialog(
