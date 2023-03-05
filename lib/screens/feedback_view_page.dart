@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/models/feedback_entry.dart';
 
 class FeedbackViewPage extends StatefulWidget {
@@ -72,12 +71,13 @@ class _FeedbackViewPageState extends State<FeedbackViewPage> {
             OutlinedButton.icon(
               icon: const Icon(Icons.message),
               onPressed: () async {
+                final navigator = Navigator.of(context);
                 final formState = _formKey.currentState!;
                 if (formState.validate()) {
                   formState.save();
                   try {
                     await widget.entry.respondWithNotification(response!);
-                    Navigator.of(context).pop();
+                    navigator.pop();
                   } catch (e) {
                     await showDialog(
                       context: context,

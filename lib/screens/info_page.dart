@@ -115,11 +115,12 @@ class InfoPage extends StatelessWidget {
                 yesButton(BuildContext context) => TextButton(
                       child: const Text('Sí, eliminar'),
                       onPressed: () async {
+                        final navigator = Navigator.of(context);
                         try {
                           await infoRef.doc(data.docs[index].id).delete();
-                          Navigator.of(context).pop();
+                          navigator.pop();
                         } catch (e) {
-                          Navigator.of(context).pop();
+                          navigator.pop();
                           showAlertDialog('$e', context, true);
                         }
                       },
