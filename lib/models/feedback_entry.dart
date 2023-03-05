@@ -42,6 +42,8 @@ class FeedbackEntry {
 
   Future<void> respondWithNotification(String response) async {
     // https://github.com/firebase/quickstart-js/tree/master/messaging#http
+    // TODO: https://firebase.google.com/docs/cloud-messaging/migrate-v1
+    // MIGRATE TO NEWER API (and use logged in user's token and make a whitelist)
     final result = await http.post(
       Uri.https('fcm.googleapis.com', '/fcm/send'),
       headers: {
