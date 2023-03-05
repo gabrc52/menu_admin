@@ -6,18 +6,18 @@ import 'package:menu_admin/models/constants.dart';
 
 class FeedbackEntry {
   const FeedbackEntry({
-    required this.buildNumber,
+    this.buildNumber,
     required this.date,
     required this.feedback,
     this.token,
-    required this.type,
+    this.type,
   });
 
-  final String buildNumber;
+  final String? buildNumber;
   final DateTime date;
   final String feedback;
   final String? token;
-  final String type;
+  final String? type;
 
   factory FeedbackEntry.fromJson(Map<String, dynamic>? json) {
     assert(json != null);
