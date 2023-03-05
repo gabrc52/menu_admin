@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:menu_admin/models/constants.dart';
 import 'package:menu_admin/models/feedback_entry.dart';
+import 'deleteme.dart';
 
 class FeedbackViewPage extends StatefulWidget {
   const FeedbackViewPage({super.key, required this.entry});
@@ -18,7 +20,9 @@ class _FeedbackViewPageState extends State<FeedbackViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Retroalimentación sobre ${widget.entry.type}'),
+        title: Text(widget.entry.type == null
+            ? 'Retroalimentación'
+            : 'Retroalimentación sobre ${widget.entry.type}'),
       ),
       body: Form(
         key: _formKey,
@@ -68,6 +72,16 @@ class _FeedbackViewPageState extends State<FeedbackViewPage> {
                 }
               },
             ),
+            // TODO: remove
+            // ElevatedButton(
+            //   onPressed: () {
+            //     for (var row in fromGoogle) {
+            //       row['date'] = DateTime.parse(row['date']!);
+            //       db.collection('feedback').add(row);
+            //     }
+            //   },
+            //   child: const Text('IMPORT FROM GOOGLE SHEETS'),
+            // ),
             OutlinedButton.icon(
               icon: const Icon(Icons.message),
               onPressed: () async {
