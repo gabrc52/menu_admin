@@ -2,6 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutterfire_ui/auth.dart';
 
 import 'info.dart';
+import 'feedback_entry.dart';
+
+// Currently contains firebaseServerKey
+// Obtain from https://console.firebase.google.com/u/0/project/menu-chapingo/settings/cloudmessaging
+export 'private_constants.dart';
 
 const providerConfigs = [
   GoogleProviderConfiguration(
@@ -18,6 +23,10 @@ final infoRef = db.collection('info').withConverter<Info>(
       toFirestore: (info, _) => info.toJson(),
     );
 final menuRef = db.collection('menu').doc('json');
+final feedbackRef = db.collection('feedback').withConverter<FeedbackEntry>(
+      fromFirestore: (snapshot, _) => FeedbackEntry.fromJson(snapshot.data()),
+      toFirestore: (feedback, _) => feedback.toJson(),
+    );
 
 const meses = <String>[
   'ene',
@@ -44,3 +53,6 @@ const diasCompletos = <String>[
   'sábado',
   'domingo'
 ];
+
+const failedFeedbackErrorMessage =
+    'Si recibiste esta notificación es porque ocurrió un error. Por favor ve a enviar comentarios y haznos saber.';

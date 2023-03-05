@@ -151,6 +151,13 @@ class InfoEditPageState extends State<InfoEditPage> {
                 update(context);
               },
               key: const Key('title'),
+              validator: (value) {
+                if (value == null) {
+                  return 'Debes poner un título';
+                } else {
+                  return null;
+                }
+              },
             ),
             TextFormField(
               decoration: const InputDecoration(
