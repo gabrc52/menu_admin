@@ -41,9 +41,12 @@ class FeedbackEntry {
   }
 
   Future<void> respondWithNotification(String response) async {
+    final notificationRef = db.collection('admin').doc('notifications');
+    final firebaseServerKey = (await notificationRef.get()).data()!['key'];
+
     // https://github.com/firebase/quickstart-js/tree/master/messaging#http
     // TODO: https://firebase.google.com/docs/cloud-messaging/migrate-v1
-    // MIGRATE TO NEWER API (and use logged in user's token and make a whitelist)
+    // MIGRATE TO NEWER API
     final result = await http.post(
       Uri.https('fcm.googleapis.com', '/fcm/send'),
       headers: {
@@ -60,5 +63,9 @@ class FeedbackEntry {
     );
     print(result.body);
     assert(result.statusCode == 200);
+
+    /// TODO: parse the result as JSON
+    /// And show error if r['success'] == 0, or r['failure'] == 1
+    /// Mostrar mensaje "comentario enviado exitosamente" si r['success'] == 1
   }
 }

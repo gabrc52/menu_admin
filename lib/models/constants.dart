@@ -4,10 +4,6 @@ import 'package:flutterfire_ui/auth.dart';
 import 'info.dart';
 import 'feedback_entry.dart';
 
-// Currently contains firebaseServerKey
-// Obtain from https://console.firebase.google.com/u/0/project/menu-chapingo/settings/cloudmessaging
-export 'private_constants.dart';
-
 const providerConfigs = [
   GoogleProviderConfiguration(
     clientId:
